@@ -1,0 +1,5 @@
+runner\SmokeTestRunner.class
+runner\RegressionTestRunner.class
+stepdefinations\BDDHooks1.class
+runner\TestRunner.class
+stepdefinations\SearchBoxSteps.class

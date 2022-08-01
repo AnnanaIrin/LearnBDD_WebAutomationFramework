@@ -42,4 +42,6 @@ public class HomePage extends WebTestBase {
     public void clickOnSearchButton(){
         clickOnElement(searchButton);
     }
+
+
 }

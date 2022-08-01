@@ -1,10 +1,5 @@
 package configuration.common;
 
-import com.relevantcodes.extentreports.ExtentReports;
-import com.relevantcodes.extentreports.ExtentTest;
-import com.relevantcodes.extentreports.LogStatus;
-import configuration.reporting.ExtentManager;
-import configuration.reporting.ExtentTestManager;
 import configuration.utilities.ReadPropertiesFrom;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -18,16 +13,12 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.testng.ITestContext;
-import org.testng.ITestResult;
 import org.testng.Reporter;
-import org.testng.annotations.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -39,57 +30,20 @@ import java.util.Properties;
 
 
 public class WebTestBase {
-
-
     // Create Driver
     public static WebDriver driver;
 
-    //Read Properties
-  static Properties readProperty= ReadPropertiesFrom.loadProperties("src/main/resources/Config.properties");
- // String getBrowserStackUserName= readProperty.getProperty("BROWSERSTACK_USERNAME");
 
-    // Credential for Cloud Environments
-    // Temp Email for BrowserStack: xodale3453@storypo.com and password : test1234
-    // Temp Email for SauceLabs: bowox22017@storypo.com and userName: bowox22017 password : Test1234$
+    static Properties readProperty= ReadPropertiesFrom.loadProperties("src/main/resources/Config.properties");
 
-    //  public static final String BROWSERSTACK_USERNAME = System.getenv("BROWSERSTACK_USERNAME");
-    //public static final String BROWSERSTACK_USERNAME ="demow_8MecpQ";
-   // public static final String BROWSERSTACK_ACCESS_KEY = "pnTGbtg3Yq4GHWSJAw55";
-
-   // public static final String BROWSERSTACK_ACCESS_KEY = System.getenv("BROWSERSTACK_ACCESS_KEY");
-   // public static final String BROWSERSTACK_URL = "https://" + BROWSERSTACK_USERNAME + ":" + BROWSERSTACK_ACCESS_KEY + "@hub-cloud.browserstack.com/wd/hub";
     public static final String BROWSERSTACK_URL = "https://" + readProperty.getProperty("BROWSERSTACK_USERNAME") + ":" +  readProperty.getProperty("BROWSERSTACK_ACCESS_KEY") + "@hub-cloud.browserstack.com/wd/hub";
 
 
     public static final String SAUCELABS_USERNAME ="bowox22017";
     public static final String SAUCELABS_ACCESS_KEY = "c04fd970-39f2-4dcc-b16b-3aaf141554bb";
     public static final String SAUCELABS_URL = "https://" + SAUCELABS_USERNAME + ":" +SAUCELABS_ACCESS_KEY + "@ondemand.us-west-1.saucelabs.com:443/wd/hub";
-   // URL url = new URL("https://bowox22017:*****54bb@ondemand.us-west-1.saucelabs.com:443/wd/hub");
 
-   //start report
-    /**
-     * **************************************************
-     * ********** Start Of Reporting Utilities **********
-     * **************************************************
-     * **************************************************
-     */
-    //ExtentReport
-    public static ExtentReports extent;
-    public static ExtentTest logger;
 
-    @BeforeSuite
-    public void extentSetup(ITestContext context) {
-        ExtentManager.setOutputDirectory(context);
-        extent = ExtentManager.getInstance();
-    }
-
-    @BeforeMethod
-    public void startExtent(Method method) {
-        String className = method.getDeclaringClass().getSimpleName();
-        String methodName = method.getName().toLowerCase();
-        ExtentTestManager.startTest(method.getName());
-        ExtentTestManager.getTest().assignCategory(className);
-    }
 
     protected String getStackTrace(Throwable t) {
         StringWriter sw = new StringWriter();
@@ -98,46 +52,7 @@ public class WebTestBase {
         return sw.toString();
     }
 
-    @AfterMethod
-    public void afterEachTestMethod(ITestResult result) throws Exception {
-        ExtentTestManager.getTest().getTest().setStartedTime(getTime(result.getStartMillis()));
-        ExtentTestManager.getTest().getTest().setEndedTime(getTime(result.getEndMillis()));
-        for (String group : result.getMethod().getGroups()) {
-            ExtentTestManager.getTest().assignCategory(group);
-        }
-        if (result.getStatus() == 1) {
-            ExtentTestManager.getTest().log(LogStatus.PASS, "Test Passed");
-        } else if (result.getStatus() == 2) {
-            //logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getName());
-            // logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getThrowable());
-            ExtentTestManager.getTest().log(LogStatus.FAIL, getStackTrace(result.getThrowable()));
-            //We do pass the path captured by this method in to the extent reports using "logger.addScreenCapture" method.
-            String screenshotPath = captureScreenShotWithPath(driver, result.getName());
-            //To add it in the extent report
-            //   logger.log(LogStatus.FAIL, logger.addScreenCapture(screenshotPath));
 
-//            if (result.getStatus() == ITestResult.FAILURE) {
-//                captureScreenShotWithPath(driver, result.getName());
-//                logger.log(LogStatus.FAIL, logger.addScreenCapture(screenshotPath));
-//            }
-
-        } else if (result.getStatus() == 3) {
-            ExtentTestManager.getTest().log(LogStatus.SKIP, "Test Skipped");
-        }
-        ExtentTestManager.endTest();
-        extent.flush();
-
-        // driver.close();
-        //driver.quit();
-        // ending test
-        //endTest(logger) : It ends the current test and prepares to create HTML report
-        extent.endTest(logger);
-    }
-
-    @AfterSuite
-    public void generateReport() {
-        extent.close();
-    }
 
     private Date getTime(long millis) {
         Calendar calendar = Calendar.getInstance();
@@ -162,7 +77,7 @@ public class WebTestBase {
 
     //Configuration purpose
     //Running same test cases in different browser that is call parallel test cases
-    @BeforeTest
+
     public void setUpAutomation() {
         System.out.println("***************** Automation Started *******************");
 
@@ -172,96 +87,35 @@ public class WebTestBase {
 
 
     //@AfterTest
-    @AfterMethod
+
     public void tearDownAutomation() {
         //driver.close();
         if(driver!=null){
             driver.quit();
         }
 
-       // System.out.println("***************** Automation End *******************");
     }
 
-//    /**
-//     *  This method will accept url based on Environment from command line during the execution
-//     * @param userCloudEnv
-//     * @param cloudEnvName
-//     * @param os
-//     * @param osVersion
-//     * @param browserName
-//     * @param browserVersion
-//     * @throws MalformedURLException
-//     */
-//
-//
-//    @Parameters({"useCloudEnv","cloudEnvName","os","osVersion","browserName","browserVersion"})
-//    @BeforeMethod
-//    public void setUp1(@Optional("false") boolean userCloudEnv,@Optional("sauceLabs") String cloudEnvName,@Optional("OS X") String os,@Optional("Big Sure") String osVersion,@Optional("firefox") String browserName,@Optional("100") String browserVersion) throws MalformedURLException {
-//
-//      if(userCloudEnv) {
-//          if (cloudEnvName.equalsIgnoreCase("browserStack")){
-//              getCloudDriver(cloudEnvName,os,osVersion,browserName,browserVersion);
-//
-//
-//          }
-//
-//      }else {
-//          getLocalDriver( os,browserName);
-//
-//
-//      }
-//
-//
-//
-//        getLog("Browser : " + browserName);
-//        getLog("Url : "+ ReadSystemProperties.getEnvUrl());
-//        driver.manage().window().maximize();
-//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
-//        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
-//        driver.manage().deleteAllCookies();
-//        driver.get(ReadSystemProperties.getEnvUrl());
-//
-//
-//
-//    }
 
 
 
 
-
-
-
-    @Parameters({"useCloudEnv","cloudEnvName","os","osVersion","browserName","browserVersion","url"})
-    @BeforeMethod
-    public void setUp(@Optional("false") boolean userCloudEnv,@Optional("sauceLabs") String cloudEnvName,@Optional("OS X") String os,@Optional("Big Sure") String osVersion,@Optional("firefox") String browserName,@Optional("100") String browserVersion, @Optional("https://www.google.com/") String url) throws MalformedURLException {
-
-        if(userCloudEnv) {
-            if (cloudEnvName.equalsIgnoreCase("browserStack")){
-                getCloudDriver(cloudEnvName,os,osVersion,browserName,browserVersion);
-
-
+    public void setUp(boolean useCloudEnv, String cloudEnvName, String os, String osVersion, String browserName, String browserVersion, String url) throws MalformedURLException {
+        if (useCloudEnv) {
+            if (cloudEnvName.equalsIgnoreCase("browserStack")) {
+                getCloudDriver(cloudEnvName, os, osVersion, browserName, browserVersion);
             }
-
-        }else {
-            getLocalDriver( os,browserName);
-
-
+        } else {
+            getLocalDriver(os, browserName);
         }
-
-
-
         getLog("Browser : " + browserName);
-        getLog("Url : "+ url);
+        getLog("Url : " + url);
         driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));//implicit wait indirect wait, wait 30 second undirected local to element
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
         driver.manage().deleteAllCookies();
         driver.get(url);
-
-
-
     }
-
 
 
     //Reporter is a class, It is come in from testNg

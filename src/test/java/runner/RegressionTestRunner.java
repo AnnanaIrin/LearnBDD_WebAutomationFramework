@@ -5,7 +5,6 @@ import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 
 
-
 @CucumberOptions(
 
 //How you map your scenario step with your step definition method?
@@ -37,7 +36,7 @@ import io.cucumber.testng.CucumberOptions;
 
 )
 //AbstractTestNGCucumberTests class come in from i.o.cucumber
-public class TestRunner extends AbstractTestNGCucumberTests {
+public class RegressionTestRunner extends AbstractTestNGCucumberTests {
 
 
 

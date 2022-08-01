@@ -6,7 +6,7 @@
    <test name="Costco Web Automation">
 
      <classes>
-         <class name="runner.TestRunner"/>
+         <class name="runner.RegressionTestRunner"/>
 
 
 

@@ -1,6 +1,5 @@
 package configuration.common;
 
-import configuration.reporting.TestLogger;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
@@ -437,20 +436,31 @@ public class GlobalReUsableMethods extends WebTestBase {
     }
 
 
+//    public void getTitle() {
+//        TestLogger.log("Get Title ");
+//        driver.getTitle();
+//    }
+//
+//
+//    public static String getText(WebElement element, String webElementName) {
+//        TestLogger.log("Getting Text from " + webElementName);
+//        String actualText = element.getText();
+//        TestLogger.log("Actual text: " + actualText);
+//        return actualText;
+//    }
+
     public void getTitle() {
-        TestLogger.log("Get Title ");
+        getLog("Get Title ");
         driver.getTitle();
     }
 
 
     public static String getText(WebElement element, String webElementName) {
-        TestLogger.log("Getting Text from " + webElementName);
+        getLog("Getting Text from " + webElementName);
         String actualText = element.getText();
-        TestLogger.log("Actual text: " + actualText);
+        getLog("Actual text: " + actualText);
         return actualText;
     }
-
-
 
 
 }

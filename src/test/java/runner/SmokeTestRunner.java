@@ -5,7 +5,6 @@ import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 
 
-
 @CucumberOptions(
 
 //How you map your scenario step with your step definition method?
@@ -27,7 +26,7 @@ import io.cucumber.testng.CucumberOptions;
                 "pretty:target/cucumber-reports/cucumber-pretty.txt",
                 "rerun:target/cucumber-reports/rerun.txt"
      },
-     tags = "@RegressionTest and not @pending" //tags is advance feature of BDD cucumber. Which will help us to run your test case base on your tag, not pending means not execute
+     tags = "@SmokeTest and not @pending" //tags is advance feature of BDD cucumber. Which will help us to run your test case base on your tag, not pending means not execute
 
 
 
@@ -37,7 +36,7 @@ import io.cucumber.testng.CucumberOptions;
 
 )
 //AbstractTestNGCucumberTests class come in from i.o.cucumber
-public class TestRunner extends AbstractTestNGCucumberTests {
+public class SmokeTestRunner extends AbstractTestNGCucumberTests {
 
 
 
