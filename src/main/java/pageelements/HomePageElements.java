@@ -6,8 +6,16 @@ public class HomePageElements {
 
     public static  final String searchBoxWebElement="//*[@id=\"search-field\"]";
     public static  final String searchButtonWebElement="//*[@id=\"formcatsearch\"]/div[2]/button/i";
+   // public static  final String verifySearchProductWebElement="//*[@id=\"category-name-header\"]/h1";
     public static  final String verifySearchProductWebElement="//*[@id=\"category-name-header\"]/h1";
 
+
+    //*[@id="category-name-header"]/h1
+
+
+
+  //  *****
+    //*[@id="category-name-header"]/h1
 
 
 

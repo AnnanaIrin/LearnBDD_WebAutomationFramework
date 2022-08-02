@@ -49,11 +49,11 @@ Feature: SearchBox Functionality
   Scenario: SearchBox functionality should work with a valid products name
     And user enter valid product name for search
       | product Name |
-      | Furniture         |
+      | Baby|
     When user click on search button
     Then user should see the valid product appears after search
       | Expected product Name |
-      | Furniture                  |
+      | Baby|
 
 
   #Data table
